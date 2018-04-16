@@ -108,10 +108,17 @@ module Telegram
         words.join
       end
 
-      def conn
+       def conn
+        prox = Services::Proxy.last
+        proxy_hash = {
+            uri: "https://#{prox.ip}:#{prox.port}",
+            user: prox.login,
+            password: prox.pass
+        }
         @conn ||= Faraday.new(url: 'https://api.telegram.org') do |faraday|
           faraday.request :multipart
           faraday.request :url_encoded
+          faraday.proxy proxy_hash
           faraday.adapter Telegram::Bot.configuration.adapter
         end
       end
