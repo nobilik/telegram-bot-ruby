@@ -110,9 +110,9 @@ module Telegram
 
        def conn
         proxy_hash = {
-            uri: "https://#{ENV["tg_proxy"]["ip"]}:#{ENV["tg_proxy"]["port"]}",
-            user: ENV["tg_proxy"]["login"],
-            password: ENV["tg_proxy"]["pass"]
+            uri: "https://#{ENV["tg_proxy_ip"]}:#{ENV["tg_proxy_port"]}",
+            user: ENV["tg_proxy_login"],
+            password: ENV["tg_proxy_pass"]
         }
         @conn ||= Faraday.new(url: 'https://api.telegram.org') do |faraday|
           faraday.request :multipart
