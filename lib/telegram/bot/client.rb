@@ -10,7 +10,7 @@ module Telegram
 
       def initialize(token, h = {})
         @options = default_options.merge(h)
-        @api = Api.new(token)
+        @api = Api.new(token, h[:proxy])
         @logger = options.delete(:logger)
       end
 
