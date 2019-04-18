@@ -47,10 +47,11 @@ module Telegram
         Telegram::Bot::Types::InlineQueryResultCachedAudio
       ].freeze
 
-      attr_reader :token
+      attr_reader :token, :proxy
 
-      def initialize(token)
+      def initialize(token, proxy)
         @token = token
+        @proxy = proxy
       end
 
       def method_missing(method_name, *args, &block)
@@ -110,14 +111,14 @@ module Telegram
 
        def conn
         proxy_hash = {
-            uri: "https://#{ENV["tg_proxy_ip"]}:#{ENV["tg_proxy_port"]}",
-            user: ENV["tg_proxy_login"],
-            password: ENV["tg_proxy_pass"]
-        }
+            uri: "https://#{@proxy[:ip]}:#{@proxy[:port]}",
+            user: @proxy[:login],
+            password: @proxy[:pass]
+        } if @proxy
         @conn ||= Faraday.new(url: 'https://api.telegram.org') do |faraday|
           faraday.request :multipart
           faraday.request :url_encoded
-          faraday.proxy proxy_hash
+          faraday.proxy proxy_hash if @proxy
           faraday.adapter Telegram::Bot.configuration.adapter
         end
       end
